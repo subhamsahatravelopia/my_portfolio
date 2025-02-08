@@ -1,9 +1,10 @@
-'use client';
 import React from 'react';
 import { Experience } from './experience';
 
-export function ExperienceDetails() {
-  const data = [
+
+async function getExperienceData() {
+  // Simulate fetching data from an API or database
+  return [
     {
       title: 'Oct 2023 - Present',
       organisation: 'Travelopia',
@@ -164,6 +165,11 @@ export function ExperienceDetails() {
       skills: 'Java, JavaScript, HTML, CSS etc.',
     },
   ];
+}
+
+export default async function ExperienceDetails() {
+ // Fetch data on the server
+ const data = await getExperienceData();
   return (
     <div className="w-full">
       <Experience data={data} />

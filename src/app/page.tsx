@@ -1,14 +1,42 @@
-import { lazy, Suspense } from 'react';
-import Publications from './components/sections/publications';
+import dynamic from 'next/dynamic';
 import { Landing } from './components/sections/landing';
-import { ExperienceDetails } from './components/workExperience/details';
+import Loading from './components/common/loading';
 
-// Lazy load Recommendations and Awards
-const Recommendations = lazy(
-  () => import('./components/sections/recommendations'),
+const ExperienceDetails = dynamic(
+  () => import('./components/workExperience/details'),
+  {
+    ssr: false,
+    loading: () => <Loading name="Loading" styledName="Work Experience" />,
+   } // Render only on the client to progressively hydrate after initial SSR
 );
-const Awards = lazy(() => import('./components/sections/awards'));
-const Contact = lazy(() => import('./components/sections/contact'));
+
+const Recommendations = dynamic(
+  () => import('./components/sections/recommendations'),
+  { ssr: false,
+    loading: () => <Loading name="Loading" styledName="Recommendations" />,
+   } // Render only on the client to progressively hydrate after initial SSR
+);
+
+const Publications = dynamic(
+  () => import('./components/sections/publications'),
+  { ssr: false,
+    loading: () => <Loading name="Loading" styledName="Publications" />,
+   } // Render only on the client to progressively hydrate after initial SSR
+);
+
+const Awards = dynamic(
+  () => import('./components/sections/awards'),
+  { ssr: false,
+    loading: () => <Loading name="Loading" styledName="Awards" />,
+   } // Render only on the client to progressively hydrate after initial SSR
+);
+const Contact = dynamic(
+  () => import('./components/sections/contact'),
+  { ssr: false,
+    loading: () =>  <Loading name="Loading" styledName="Contact" />,
+   } // Render only on the client to progressively hydrate after initial SSR
+);
+
 
 export default function Home() {
   return (
@@ -16,19 +44,9 @@ export default function Home() {
       <Landing />
       <ExperienceDetails />
       <Publications />
-
-      {/* Wrap lazy loaded components in Suspense */}
-      <Suspense fallback={<div>Loading Recommendations...</div>}>
-        <Recommendations />
-      </Suspense>
-
-      <Suspense fallback={<div>Loading Awards...</div>}>
-        <Awards />
-      </Suspense>
-
-      <Suspense fallback={<div>Loading Contact...</div>}>
-        <Contact />
-      </Suspense>
+      <Recommendations />
+      <Awards />
+      <Contact />
     </main>
   );
 }
